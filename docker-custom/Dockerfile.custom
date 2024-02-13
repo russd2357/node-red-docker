@@ -50,6 +50,9 @@ RUN apk add --no-cache --virtual buildtools build-base linux-headers udev python
     /tmp/remove_native_gpio.sh && \
     cp -R node_modules prod_node_modules
 
+RUN npm install node-red-node-mongodb
+
+
 #### Stage RELEASE #####################################################################################################
 FROM base AS RELEASE
 ARG BUILD_DATE
@@ -78,6 +81,10 @@ COPY --from=build /usr/src/node-red/prod_node_modules ./node_modules
 RUN chown -R node-red:root /usr/src/node-red && \
     /tmp/install_devtools.sh && \
     rm -r /tmp/*
+
+# Chown /data so that it can be persisted on a volume
+RUN chmod -R 777 /usr/src/node-red/node_modules
+RUN chmod -R 777 /data
 
 RUN npm config set cache /data/.npm --global 
 
