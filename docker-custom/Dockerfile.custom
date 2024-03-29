@@ -86,9 +86,9 @@ RUN npm config set cache /data/.npm --global
 
 # enable volume mount on /data
 RUN chmod -R 777 /data
-RUN chmod -R 777 /usr/src/node-red
 
-USER node-red
+#USER node-red
+RUN chown -R 1000:1000 /usr/src/node-red && chmod -R 777 /usr/src/node-red
 
 # Env variables
 ENV NODE_RED_VERSION=$NODE_RED_VERSION \
